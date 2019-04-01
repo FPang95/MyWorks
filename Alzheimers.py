@@ -22,7 +22,7 @@ print(new_df.groupby(["Area"]).mean())
 for i in new_df.columns[1:]:
     ticks = range(1, len(new_df.groupby(["Area"]))+1)
     height = list(new_df.groupby(["Area"]).mean()[i])
-    tick_label = new_df["Area"].sort_values().unique()
+    tick_label = ["AB", "BC", "CA", "MB", "NB", "NL", "NT,NU,YT", "NS", "ON", "PE", "QC"]
     plt.bar(ticks, height, tick_label=tick_label, width=0.6)
     plt.title("Alzheimer's " + i + " by Province")
     plt.ylabel("Population Percentage")
