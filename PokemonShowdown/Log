@@ -1,0 +1,7 @@
+May 29 2019
+-current data webscraped from pokebattle logs: tier, team, win/loss, pokemon down, moves used and their efficacy, total turns
+and rank
+-trying to figure out how to get max number of KO by one pokemon
+-Also trying to import graph of move types to differentiate between attacking and non-attacking moves used
+-Think of other metrics to capture
+-Analysis coming up soon
