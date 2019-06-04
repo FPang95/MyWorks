@@ -13,17 +13,23 @@ for r, d, f in os.walk(path):
 filename = "Poke_log.csv"
 f = open(filename, 'w')
 headers = "Tier, Team, Win/Loss, Own Pokemon Down, Opponent Pokemon Down, Most KO by one Pokemon, Moves used, " \
-          "Super effective, Not very effective, Turns, Rank\n"
+          "Super effective, Not very effective, Attacking Moves, Status Moves, Turns, Rank\n"
 f.write(headers)
-'''
 
-status_url = 'https://bulbapedia.bulbagarden.net/wiki/Status_move'
+###
+# Makes list of all non-offense moves
+status_url = 'file:///Users/frankpang/PycharmProjects/PokeBattles/Status%20move%20-%20Bulbapedia,' \
+             '%20the%20community-driven%20Poke%CC%81mon%20encyclopedia.html'
 uClient = uReq(status_url)
 status_html = uClient.read()
 uClient.close()
 
-status_soup = soup(status_html, "html.parser")
-'''
+page_soup = soup(status_html, "html.parser")
+moves = page_soup.find_all('td',{"width":"100px"})
+
+status_move = [x.text.strip() for x in moves]
+###
+
 
 for myfile in files:
     my_url = 'file:///Users/frankpang/PycharmProjects/PokeBattles/Pokelog/'+myfile
@@ -37,7 +43,6 @@ for myfile in files:
 
     #gives tier
     tier = page_soup.find('div', {"class":"wrapper replay-wrapper"}).h1.strong.string
-
     #name1 = page_soup.findAll('div', {"class":"chat"})[0].text
     #name2 = page_soup.findAll('div', {"class":"chat"})[1].text
 
@@ -45,7 +50,7 @@ for myfile in files:
     if "Data Tester" in winner:
         outcome = "Win"
     else:
-        outcome = "Lose"
+        outcome = "Loss"
 
 
     #gives
@@ -68,6 +73,7 @@ for myfile in files:
         else:
             myteam = "N/A"
     else:
+        myteam="N/A"
         elo = "N/A"
 
 
@@ -88,7 +94,12 @@ for myfile in files:
 
     ineffective = 0
     effective = 0
+
+    offense = 0
+    status = 0
+
     total_moves = []
+
     for move in moves:
         if len(move["class"])==1:
             if "fainted" in move.text:
@@ -105,6 +116,15 @@ for myfile in files:
             elif "It's super effective" in move.text:
                 effective+=1
 
+            if "used" in move.text:
+                if move.strong != None:
+                    if move.strong.text in status_move:
+                        status += 1
+
+                    elif move.strong.text not in status_move:
+                        offense += 1
+
+
     move_counter = {x: total_moves.count(x) for x in total_moves}
     str_counter = str(move_counter)
     new_counter = str_counter.replace(", ", " | ")
@@ -112,7 +132,8 @@ for myfile in files:
 
 
     f.write(tier + "," + myteam + "," + outcome + "," + str(own_poke_faints) + "," + str(opp_poke_faints) + "," +
-            mostdown + "," + new_counter + "," + str(effective) + "," + str(ineffective) + "," + str(turns) + "," + elo + "\n")
+            mostdown + "," + new_counter + "," + str(effective) + "," + str(ineffective) + "," +
+            str(offense) + "," + str(status) + "," + str(turns) + "," + elo + "\n")
 
 
 f.close()
