@@ -5,3 +5,9 @@ and rank
 -Also trying to import graph of move types to differentiate between attacking and non-attacking moves used
 -Think of other metrics to capture
 -Analysis coming up soon
+
+
+June 4 2019
+-increased log of battles
+-added in two new columns: counts of attack and status moves per battle
+
