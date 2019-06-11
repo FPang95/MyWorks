@@ -11,3 +11,9 @@ June 4 2019
 -increased log of battles
 -added in two new columns: counts of attack and status moves per battle
 
+
+June 11 2019
+-Pulled pokemon used in random battles for each player
+-added total move counter
+-analysis track pokemon usage based on tiers to determine what teams will be faced most often
+  -compare that based on rank (by 100s)
