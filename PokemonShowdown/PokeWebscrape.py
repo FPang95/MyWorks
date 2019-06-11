@@ -2,6 +2,8 @@ import re, os
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen as uReq
 
+#Pokelog, password: DataTest
+
 path = '/Users/frankpang/PycharmProjects/PokeBattles/Pokelog/'
 files = []
 for r, d, f in os.walk(path):
@@ -12,8 +14,9 @@ for r, d, f in os.walk(path):
 
 filename = "Poke_log.csv"
 f = open(filename, 'w')
-headers = "Tier, Team, Win/Loss, Own Pokemon Down, Opponent Pokemon Down, Most KO by one Pokemon, Moves used, " \
-          "Super effective, Not very effective, Attacking Moves, Status Moves, Turns, Rank\n"
+headers = "Tier, My Team/Pokemon Revealed, Opponent's Team/Pokemon Revealed, Win/Loss, Own Pokemon Down, Opponent " \
+          "Pokemon Down, Moves used, Super effective, Not very effective, Total Moves, Attacking Moves, " \
+          "Status Moves, Turns, Rank\n"
 f.write(headers)
 
 ###
@@ -47,7 +50,9 @@ for myfile in files:
     #name2 = page_soup.findAll('div', {"class":"chat"})[1].text
 
     winner = page_soup.findAll('div', {"class": "battle-history"})[-1].strong.text
-    if "Data Tester" in winner:
+    moves = page_soup.find_all('div',{"class":"battle-history"})
+
+    if "Data Tester" in winner or "PokeLog" in winner:
         outcome = "Win"
     else:
         outcome = "Loss"
@@ -58,7 +63,7 @@ for myfile in files:
         rankings = page_soup.findAll('div', {"class":"chat"})[-1].text.split(": ")[-1]
         ratings = page_soup.findAll('div', {"class": "chat"})
         for elo in ratings:
-            if "Data Tester's rating" in elo.text:
+            if ("Data Tester's rating" in elo.text) or ("PokeLog's rating" in elo.text):
                 elo = elo.text.split(": ")[-1]
                 break
 
@@ -66,20 +71,57 @@ for myfile in files:
             elo = "N/A"
 
         if "Random" not in tier:
-            team = page_soup.find('div', {"class": "chat battle-history"}).em.text.split(" / ")
-            team.sort()
-            myteam = '|'.join(team)
+            teams = page_soup.findAll('div', {"class": "chat battle-history"})
+
+            myteam = teams[0].em.text.split(" / ")
+            opteam = teams[1].em.text.split(" / ")
+            myteam.sort()
+            opteam.sort()
+            myteam = '|'.join(myteam)
+            opteam = '|'.join(opteam)
 
         else:
-            myteam = "N/A"
+            myteam = []
+            opteam = []
+            for poke in moves:
+                if "sent out" in poke.text:
+                    poke = poke.text.split()
+                    poke = poke[-1].strip("()!")
+                    opteam.append(poke)
+                elif "Go!" in poke.text:
+                    poke = poke.text.split()
+                    poke = poke[-1].strip("()!")
+                    myteam.append(poke)
+
+            myteam = list(set(myteam))
+            opteam = list(set(opteam))
+            myteam.sort()
+            opteam.sort()
+            myteam = '|'.join(myteam)
+            opteam = '|'.join(opteam)
     else:
-        myteam="N/A"
+        myteam = []
+        opteam = []
+        for poke in moves:
+            if "sent out" in poke.text:
+                poke = poke.text.split()
+                poke = poke[-1].strip("()!")
+                opteam.append(poke)
+            elif "Go!" in poke.text:
+                poke = poke.text.split()
+                poke = poke[-1].strip("()!")
+                myteam.append(poke)
+
+        myteam = list(set(myteam))
+        opteam = list(set(opteam))
+        myteam.sort()
+        opteam.sort()
+        myteam = '|'.join(myteam)
+        opteam = '|'.join(opteam)
         elo = "N/A"
 
 
     turns = len(page_soup.findAll('h2',{"class":"battle-history"}))
-
-    moves = page_soup.find_all('div',{"class":"battle-history"})
 
     # only if not random battle or unrated random battle
     #for line in moves:
@@ -124,16 +166,16 @@ for myfile in files:
                     elif move.strong.text not in status_move:
                         offense += 1
 
-
+    totalmoves = status + offense
     move_counter = {x: total_moves.count(x) for x in total_moves}
     str_counter = str(move_counter)
     new_counter = str_counter.replace(", ", " | ")
-    mostdown = "N/A"
 
 
-    f.write(tier + "," + myteam + "," + outcome + "," + str(own_poke_faints) + "," + str(opp_poke_faints) + "," +
-            mostdown + "," + new_counter + "," + str(effective) + "," + str(ineffective) + "," +
-            str(offense) + "," + str(status) + "," + str(turns) + "," + elo + "\n")
+
+    f.write(tier + "," + myteam + "," + opteam + "," + outcome + "," + str(own_poke_faints) + "," +
+            str(opp_poke_faints) + "," + new_counter + "," + str(effective) + "," + str(ineffective) + "," +
+            str(totalmoves) + "," + str(offense) + "," + str(status) + "," + str(turns) + "," + str(elo) + "\n")
 
 
 f.close()
