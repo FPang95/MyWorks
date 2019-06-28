@@ -17,3 +17,9 @@ June 11 2019
 -added total move counter
 -analysis track pokemon usage based on tiers to determine what teams will be faced most often
   -compare that based on rank (by 100s)
+
+June 28 2019
+-increased CSV file
+-Streamlined websrape by making a separate file to store functions
+-going to add pokemone typing list for own and opponents pokemon list
+-for analysis, bin based on ranking (by 100s)
