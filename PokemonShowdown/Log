@@ -23,3 +23,9 @@ June 28 2019
 -Streamlined websrape by making a separate file to store functions
 -going to add pokemone typing list for own and opponents pokemon list
 -for analysis, bin based on ranking (by 100s)
+
+July 1 2019
+-separated some attributes to mine and opponents
+-going to add pokemone typing list for own and opponents pokemon list
+-for analysis, bin based on ranking (by 100s)
+-try to find way to get most pokemon ko'd by single pokemon as metric
