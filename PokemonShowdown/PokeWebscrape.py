@@ -17,8 +17,8 @@ for r, d, f in os.walk(path):
 filename = "Poke_log.csv"
 f = open(filename, 'w')
 headers = "Tier,My Team/Pokemon Revealed,Opponent's Team/Pokemon Revealed,Win/Loss,Own Pokemon Down,Opponent " \
-          "Pokemon Down,Moves used,Super effective,Not very effective,Total Moves,Attacking Moves," \
-          "Status Moves,Turns,Rank\n"
+          "Pokemon Down,My Moves Used,Opponent's Moves Used,Super effective,Not very effective," \
+          "My Attacking Moves,My Status Moves,Opponent's Attacking Moves,Opponent's Status Moves,Turns,Rank\n"
 f.write(headers)
 
 ###
@@ -72,19 +72,21 @@ for pokefile in files:
     ineffective, effective = pf.efficacy(page_soup)
 
     # gives type of moves used
-    offense, status = pf.moveType(page_soup, status_move)
-    # gives total number of moves used
-    totalmoves = status + offense
+    myoffense, mystatus = pf.moveType(page_soup, status_move, 0)
+
+    oppoffense, oppstatus = pf.moveType(page_soup, status_move, 1)
 
     # give comprehensive list of all moves used
-    moves_list = "|".join(pf.moveList(page_soup))
+    my_moves_list = "|".join(pf.moveList(page_soup,0))
+    opp_moves_list = "|".join(pf.moveList(page_soup,1))
 
     #move_counter = {x: total_moves.count(x) for x in total_moves}
     #str_counter = str(move_counter)
     #new_counter = str_counter.replace(", ", " | ")
 
     f.write(tier + "," + myteam + "," + opteam + "," + outcome + "," + str(own_poke_faints) + "," +
-            str(opp_poke_faints) + "," + moves_list + "," + str(effective) + "," + str(ineffective) + "," +
-            str(totalmoves) + "," + str(offense) + "," + str(status) + "," + str(turns) + "," + str(elo) + "\n")
+            str(opp_poke_faints) + "," + my_moves_list + "," + opp_moves_list + "," + str(effective) +
+            "," + str(ineffective) + "," + str(myoffense) + "," + str(mystatus) + "," + str(oppoffense)
+            + "," + str(oppstatus) + "," + str(turns) + "," + str(elo) + "\n")
 
 f.close()
