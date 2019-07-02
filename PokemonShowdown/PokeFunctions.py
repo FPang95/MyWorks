@@ -1,6 +1,7 @@
 # functions for webscraping
 from bs4 import BeautifulSoup as soup
 import numpy as np
+import re
 
 
 def get_teams(webpage, owner, tier):
@@ -15,11 +16,11 @@ def get_teams(webpage, owner, tier):
         team = []
         moves = webpage.findAll('div', {"class": "battle-history"})
         for poke in moves:
-            if (owner == 0) and ("sent out" in poke.text):
+            if (owner == 1) and ("sent out" in poke.text):
                 poke = poke.strong.text
                 poke = poke.strip("()!")
                 team.append(poke)
-            elif (owner == 1) and ("Go!" in poke.text):
+            elif (owner == 0) and ("Go!" in poke.text):
                 poke = poke.strong.text
                 poke = poke.strip("()!")
                 team.append(poke)
@@ -74,15 +75,22 @@ def pokemonDown(webpage):
 
 
 
-def moveList(webpage):
+def moveList(webpage, who):
     # makes and returns list of all moves used in game
     moves = webpage.findAll('div', {"class": "battle-history"})
     total_moves=[]
+    a=re.compile("\s+")
     for move in moves:
         if len(move["class"])==1:
-            if " used " in move.text:
-                action = move.text.split(" used ")[-1]
-                total_moves.append(action[:len(action)-1])
+            ref = a.split(move.text)
+            if (who == 0) and ("opposing" not in ref) and (" used " in move.text):
+                if move.strong is not None:
+                    action = move.strong.text
+                    total_moves.append(action)
+            elif (who == 1) and ("opposing" in ref) and ("used" in ref):
+                if move.strong is not None:
+                    action = move.strong.text
+                    total_moves.append(action)
 
     # alphabetizes the moves
     total_moves.sort()
@@ -104,18 +112,27 @@ def efficacy(webpage):
     return [ineffcount, supercount]
 
 
-def moveType(webpage, statuslist):
+def moveType(webpage, statuslist, who):
     offense = 0
     status = 0
+    a = re.compile("\s+")
     moves = webpage.findAll('div', {"class": "battle-history"})
     for move in moves:
         if len(move["class"])==1:
-            if "used" in move.text:
-                if move.strong != None:
+            ref = a.split(move.text)
+            if (who == 0) and ("opposing" not in ref) and (" used " in move.text):
+                if move.strong is not None:
                     if move.strong.text in statuslist:
                         status += 1
 
                     elif move.strong.text not in statuslist:
                         offense += 1
 
+            elif (who == 1) and ("opposing" in ref) and ("used" in ref):
+                if move.strong is not None:
+                    if move.strong.text in statuslist:
+                        status += 1
+
+                    elif move.strong.text not in statuslist:
+                        offense += 1
     return [offense, status]
