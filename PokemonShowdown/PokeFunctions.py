@@ -136,3 +136,20 @@ def moveType(webpage, statuslist, who):
                     elif move.strong.text not in statuslist:
                         offense += 1
     return [offense, status]
+
+
+def binRankings(rank):
+    # takes the rank and bins it into groups by 100s
+    bins = list(range(1000,3001,100))
+    if len(rank)==3:
+        rankrange = np.nan
+        return rankrange
+
+    elif len(rank)>3:
+        endrank = int(rank.split("(")[0][-4:])
+
+    for bin in bins:
+        if endrank>bin:
+            rankrange = "[" + str(bins[bins.index(bin)]) + "-" + str(bins[bins.index(bin) + 1]) + "]"
+
+    return rankrange
