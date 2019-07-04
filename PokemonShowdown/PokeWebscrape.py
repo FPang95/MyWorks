@@ -18,7 +18,7 @@ filename = "Poke_log.csv"
 f = open(filename, 'w')
 headers = "Tier,My Team/Pokemon Revealed,Opponent's Team/Pokemon Revealed,Win/Loss,Own Pokemon Down,Opponent " \
           "Pokemon Down,My Moves Used,Opponent's Moves Used,Super effective,Not very effective," \
-          "My Attacking Moves,My Status Moves,Opponent's Attacking Moves,Opponent's Status Moves,Turns,Rank\n"
+          "My Attacking Moves,My Status Moves,Opponent's Attacking Moves,Opponent's Status Moves,Turns,Rank,Rank Range\n"
 f.write(headers)
 
 ###
@@ -58,6 +58,8 @@ for pokefile in files:
     # gives rank
     elo = pf.getElo(page_soup, tier)
 
+    elorange = pf.binRankings(str(elo))
+
     # gives teams
     myteam = '|'.join(pf.get_teams(page_soup, 0, tier))
     opteam = '|'.join(pf.get_teams(page_soup, 1, tier))
@@ -87,6 +89,6 @@ for pokefile in files:
     f.write(tier + "," + myteam + "," + opteam + "," + outcome + "," + str(own_poke_faints) + "," +
             str(opp_poke_faints) + "," + my_moves_list + "," + opp_moves_list + "," + str(effective) +
             "," + str(ineffective) + "," + str(myoffense) + "," + str(mystatus) + "," + str(oppoffense)
-            + "," + str(oppstatus) + "," + str(turns) + "," + str(elo) + "\n")
+            + "," + str(oppstatus) + "," + str(turns) + "," + str(elo) + "," + str(elorange) + "\n")
 
 f.close()
