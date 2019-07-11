@@ -1,26 +1,3 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-
-df = pd.read_csv("CCDI2018.csv")
-
-#print(df.head())
-
-percent_only = df.loc[df["Unit"] == "%"]
-
-for domains in list(percent_only["Domain"].unique()):
-    print(str(list(percent_only["Domain"].unique()).index(domains)+1) + ": " + domains)
-
-print(percent_only.groupby(["Domain"]).mean()["Latest Data [a]"])
-
-ticks = range(1, len(percent_only.groupby(["Domain"]))+1)
-height = list(percent_only.groupby(["Domain"]).mean()["Latest Data [a]"])
-tick_label = range(1, len(percent_only["Domain"].unique())+1)
-plt.bar(ticks, height, tick_label=tick_label, width=0.6)
-plt.title("Chronic disease indicators")
-plt.ylabel("Percentage")
-plt.show()
-
-
 #new_df = pd.DataFrame(alz["Area"])
 
 #new_df["Incidence"] = ince["Incidence (Rate per 100)"].astype('float')
