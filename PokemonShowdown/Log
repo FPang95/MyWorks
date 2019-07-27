@@ -40,3 +40,9 @@ July 24th 2019
 -Added top 10 most used pokemon and moves separated by tier
 -going to add pokemone typing list for own and opponents pokemon list
 -try to find way to get most pokemon ko'd by single pokemon as metric
+
+July 27th 2019
+-added more entries to CSV
+-adding excel file for pokemon typing and base stats
+-machine learning to predict if pokemon from random battles dictates victory
+-add base stats, typing, and weaknesses in teams to CSV
