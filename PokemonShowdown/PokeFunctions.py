@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup as soup
 import numpy as np
 import re
+import pandas as pd
 
 
 def get_teams(webpage, owner, tier):
@@ -9,7 +10,7 @@ def get_teams(webpage, owner, tier):
     # non-random battles have teams shown in the start
     if "Random" not in tier:
         teams = webpage.findAll('div', {"class": "chat battle-history"})
-        clean_team = teams[owner].em.text.strip("-*").split(" / ")
+        clean_team = teams[owner].em.text.replace("-*", '').split(" / ")
 
     # random battles don't reveal pokemon unlessed used. This will grab all pokemon that have been revealed
     else:
@@ -53,9 +54,9 @@ def getElo(webpage, tier):
 
     # if unranked match or rank could not be obtained, returns nan
         if rankings[0]!="1" and rankings[0]!="2":
-            return np.nan
+            return np.NaN
     else:
-        return np.nan
+        return np.NaN
 
 
 def pokemonDown(webpage):
@@ -137,7 +138,6 @@ def moveType(webpage, statuslist, who):
                         offense += 1
     return [offense, status]
 
-
 def binRankings(rank):
     # takes the rank and bins it into groups by 100s
     bins = list(range(1000,3001,100))
@@ -153,3 +153,23 @@ def binRankings(rank):
             rankrange = "[" + str(bins[bins.index(bin)]) + "-" + str(bins[bins.index(bin) + 1]) + "]"
 
     return rankrange
+
+
+def getTypings(typing, poketeam):
+    # takes dataframe of pokemon typings and team and returns list of all typings in the team
+    typing_list = []
+    for pokemon in poketeam:
+        typing_list.append(typing.loc[typing["Name"]==pokemon]["Type"].to_string(index=False).strip())
+
+    return typing_list
+
+def baseStats(base_stats, poketeam):
+    total_stats = np.zeros((7,1))
+    stats_list = ["Total", "HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]
+    for pokemon in poketeam:
+        for i in range(7):
+            total_stats[i]+=(base_stats.loc[base_stats["Name"]==pokemon][stats_list[i]].values)/len(poketeam)
+
+    total_stats
+    return total_stats.tolist()
+
