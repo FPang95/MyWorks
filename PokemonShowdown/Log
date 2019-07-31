@@ -52,4 +52,4 @@ July 31st 2019
 -will try to look for weaknesses after
 -added columns for base stats (attack, defense etc) averaged based on team
   -Will use as a model to predict future outcomes
- -code for functions and webscrape to grab this data off an excel file and cross reference to webscraped data
+-code for functions and webscrape to grab this data off an excel file and cross reference to webscraped data
