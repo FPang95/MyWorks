@@ -46,3 +46,10 @@ July 27th 2019
 -adding excel file for pokemon typing and base stats
 -machine learning to predict if pokemon from random battles dictates victory
 -add base stats, typing, and weaknesses in teams to CSV
+
+July 31st 2019
+-added column to CSV to grab a list of pokemon typings based on team
+-will try to look for weaknesses after
+-added columns for base stats (attack, defense etc) averaged based on team
+  -Will use as a model to predict future outcomes
+ -code for functions and webscrape to grab this data off an excel file and cross reference to webscraped data
