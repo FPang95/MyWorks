@@ -1,0 +1,12 @@
+August 6, 2019
+Starting Idea:
+
+Using pubicly available data, make machine learning algorithm for predicting the 
+likihood of having a particular disease given the symptoms that will be provided by the user
+
+Also will suggest treatment options
+
+Will give list of up to 10 most likely disease given the list of symptoms
+Will determine the diseases based on prevalance and how many matching symptoms
+  Also look into how frequently each symptom appears when someone has the disease
+
