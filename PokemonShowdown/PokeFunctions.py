@@ -164,12 +164,16 @@ def getTypings(typing, poketeam):
     return typing_list
 
 def baseStats(base_stats, poketeam):
+    #takes the average base states for own and opponent's team
     total_stats = np.zeros((7,1))
     stats_list = ["Total", "HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]
     for pokemon in poketeam:
         for i in range(7):
             total_stats[i]+=(base_stats.loc[base_stats["Name"]==pokemon][stats_list[i]].values)/len(poketeam)
 
-    total_stats
+
+    total_stats = total_stats.round(decimals=2)
     return total_stats.tolist()
+
+
 
