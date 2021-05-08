@@ -1,1 +1,3 @@
 Updated version of webscraping which grabs data from Pokemon Showdown using Selenium
+
+Functions added will grab info from various webpages from Pokemon Showdown website. Currently, functions included will grab Pokedex, starter usage, pokemon usage
