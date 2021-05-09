@@ -2,4 +2,7 @@ Sentiment analysis of The Last of Us 2 Video Game reviews
 
 'user_reviews_g2.csv' contains reviews and scores
 
-'
+'Review_sentiment-Improved.ipynb' contains NLP code to clean reviews, tokenize and vectorize reviews, then predict review sentiment by converting scores between
+1-10 with either NEGATIVE (1-4), NEUTRAL (5-7) or POSITIVE (8-10) sentiment.
+
+ML Models used include SVM and RFC
